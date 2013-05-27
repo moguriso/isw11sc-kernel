@@ -1373,15 +1373,16 @@ static struct i2c_driver melfas_ts_driver =
 
 static int __devinit melfas_ts_init(void)
 {
-	#if defined(CONFIG_MACH_C1_KDDI_REV00)
-	extern int sec_isLpmMode(void);
-
-	if (sec_isLpmMode())
-	{
-		printk(KERN_ERR "LPM MODE (melfas_ts_init)!\n");
-		return 0;
-	}
-	#endif
+    //moguriso
+//	#if defined(CONFIG_MACH_C1_KDDI_REV00)
+//	extern int sec_isLpmMode(void);
+//
+//	if (sec_isLpmMode())
+//	{
+//		printk(KERN_ERR "LPM MODE (melfas_ts_init)!\n");
+//		return 0;
+//	}
+//	#endif
 
 	return i2c_add_driver(&melfas_ts_driver);
 }

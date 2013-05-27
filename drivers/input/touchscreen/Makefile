@@ -72,6 +72,7 @@ obj-$(CONFIG_TOUCHSCREEN_WM97XX_ZYLONITE)	+= zylonite-wm97xx.o
 obj-$(CONFIG_TOUCHSCREEN_W90X900)	+= w90p910_ts.o
 obj-$(CONFIG_TOUCHSCREEN_TPS6507X)	+= tps6507x-ts.o
 obj-$(CONFIG_TOUCHSCREEN_MELFAS)	+= melfas_ts.o mcs8000_download.o
+obj-$(CONFIG_TOUCHSCREEN_MELFAS_MMS)	+= melfas_mms_ts.o
 obj-$(CONFIG_TOUCHSCREEN_MELFAS_GC)	+= mms_ts_gc.o
 obj-$(CONFIG_TOUCHSCREEN_MMS152)	+= mms152.o mms152_download.o mms152_isc_download.o
 obj-$(CONFIG_MELFAS_TOUCHKEY)		+= melfas_touchkey.o melfas_download.o
@@ -80,6 +81,7 @@ obj-$(CONFIG_TOUCHSCREEN_ATMEL_MXT540E)	+= mxt540e.o
 obj-$(CONFIG_TOUCHSCREEN_MXT1386)	+= atmel_mxt1386.o atmel_mxt1386_cfg.o
 obj-$(CONFIG_TOUCHSCREEN_MXT768E)	+= mxt768e.o
 obj-$(CONFIG_TOUCHSCREEN_SYNAPTICS_S7301)      += synaptics_s7301.o synaptics_fw_updater.o synaptics_sysfs.o
+obj-$(CONFIG_KEYPAD_MELFAS_TOUCH)                += grande_touchkey.o grande_download.o
 ifeq ($(TARGET_BUILD_VARIANT), eng)
 KBUILD_CFLAGS		+= -DSEC_TSP_EVENT_DEBUG
 endif

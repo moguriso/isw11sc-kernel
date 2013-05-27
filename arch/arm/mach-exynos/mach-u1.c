@@ -59,6 +59,10 @@
 #include <linux/android_pmem.h>
 #endif
 
+#if defined(CONFIG_TOUCHSCREEN_MELFAS_MMS)
+#include <mach/board-melfas.h>
+#endif //defined(CONFIG_TOUCHSCREEN_MELFAS_MMS)
+
 #include <asm/mach/arch.h>
 #include <asm/mach-types.h>
 
@@ -6790,6 +6794,7 @@ static struct melfas_tsi_platform_data melfas_pdata = {
 };
 #endif
 
+#if !defined(CONFIG_TOUCHSCREEN_MELFAS_MMS) //moguriso
 static struct i2c_board_info i2c_devs3[] __initdata = {
 #ifdef CONFIG_TOUCHSCREEN_ATMEL_MXT224_U1
 	{
@@ -6817,6 +6822,7 @@ static struct i2c_board_info i2c_devs3[] __initdata = {
         },
 #endif
 };
+#endif //!defned(CONFIG_TOUCHSCREEN_MELFAS_MMS) //moguriso
 #endif
 #ifdef CONFIG_S3C_DEV_I2C4
 /* I2C4 */
@@ -8353,6 +8359,10 @@ static void __init universal_tsp_init(void)
 {
 	int gpio;
 
+#if defined(CONFIG_TOUCHSCREEN_MELFAS_MMS) //moguriso
+	melfas_tsp_set_platdata(TSP_POSITION_DEFAULT);
+	melfas_tsp_init();
+#else //defined(CONFIG_TOUCHSCREEN_MELFAS_MMS) //moguriso
 	/* TSP_LDO_ON: XMDMADDR_11 */
 	gpio = GPIO_TSP_LDO_ON;
 	gpio_request(gpio, "TSP_LDO_ON");
@@ -8372,6 +8382,7 @@ static void __init universal_tsp_init(void)
 	gpio_request(GPIO_TSP_SCL, "TSP_SCL");
 	gpio_request(GPIO_OLED_DET, "OLED_DET");
 #endif
+#endif //defined(CONFIG_TOUCHSCREEN_MELFAS_MMS) //moguriso
 }
 
 #ifdef CONFIG_EPEN_WACOM_G5SP
@@ -8447,8 +8458,10 @@ static void __init smdkc210_machine_init(void)
 #endif
 #ifdef CONFIG_S3C_DEV_I2C3
 	universal_tsp_init();
+#if !defined(CONFIG_TOUCHSCREEN_MELFAS_MMS) //moguriso
 	s3c_i2c3_set_platdata(NULL);
 	i2c_register_board_info(3, i2c_devs3, ARRAY_SIZE(i2c_devs3));
+#endif //!defined(CONFIG_TOUCHSCREEN_MELFAS_MMS) //moguriso
 #endif
 #ifdef CONFIG_S3C_DEV_I2C4
 	s3c_i2c4_set_platdata(NULL);

@@ -68,7 +68,7 @@ ifeq ($(CONFIG_MACH_U1_NA_SPR),y)
 obj-$(CONFIG_MACH_U1)			+= mach-u1.o dev-u1-phone.o
 else
 ifeq ($(CONFIG_MACH_C1_KDDI_REV00),y)
-obj-$(CONFIG_MACH_U1)			+= mach-u1.o dev-u1-phone.o
+obj-$(CONFIG_MACH_U1)			+= mach-u1.o dev-u1-phone.o board-melfas.o
 else
 ifeq ($(CONFIG_MACH_U1CAMERA_BD),y)
 obj-$(CONFIG_MACH_U1)			+= mach-u1cam.o
