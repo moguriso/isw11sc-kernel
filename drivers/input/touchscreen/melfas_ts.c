@@ -51,7 +51,11 @@
 
 #define DEBUG_PRINT 			0
 
+#if 0 /* moguriso */
+#define	__SUPPORT_SLOT_FOR_ICS__	(0)
+#else /* moguriso */
 #define	__SUPPORT_SLOT_FOR_ICS__	(1)
+#endif /* moguriso */
 
 #if DEBUG_PRINT
 #define	tsp_dbg_msg(str, args...)	\
@@ -730,8 +734,10 @@ static void melfas_ts_get_data(struct melfas_ts_data *ts)
 
 	tsp_dbg_msg("\n");
 
-	if(ts ==NULL)
+	if(ts ==NULL){
+    tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
 			printk(KERN_ERR "[melfasTSP]melfas_ts_get_data: ts NULL\n");
+    }
 
 	buf[0] = TS_READ_START_ADDR;
 
@@ -739,12 +745,14 @@ static void melfas_ts_get_data(struct melfas_ts_data *ts)
 	if(ret < 0)
 	{
 		printk(KERN_ERR "[melfasTSP] melfas_ts_get_data: i2c_master_send 1 err=%d\n",ret);
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
 		return ;	
 	}
 	ret = i2c_master_recv(ts->client, buf, 1);
 	if(ret < 0)
 	{
 		printk(KERN_ERR "[melfasTSP] melfas_ts_get_data: i2c_master_recv 1 err=%d\n",ret);
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
 		return ;	
 	}
 
@@ -757,12 +765,14 @@ static void melfas_ts_get_data(struct melfas_ts_data *ts)
 		ret = i2c_master_send(ts->client, buf, 1);
 		if(ret < 0)
 		{
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
 			printk(KERN_ERR "[melfasTSP] melfas_ts_get_data: i2c_master_send 2 err=%d\n",ret);
 			return ;	
 		}
 		ret = i2c_master_recv(ts->client, buf, read_num);
 		if(ret < 0)
 		{
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
 			printk(KERN_ERR "[melfasTSP] melfas_ts_get_data: i2c_master_recv 2 err=%d\n",ret);
 			return ;	
 		}
@@ -777,6 +787,7 @@ static void melfas_ts_get_data(struct melfas_ts_data *ts)
 				g_Mtouch_info[i].strength, g_Mtouch_info[i].width);*/
 
 			exynos_cpufreq_lock(DVFS_LOCK_ID_TSP, L3);
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
 		}
 		else if (!(buf[0] & 0x80) && touch_cpu_lock_status)
 		{
@@ -788,6 +799,7 @@ static void melfas_ts_get_data(struct melfas_ts_data *ts)
 				g_Mtouch_info[i].strength, g_Mtouch_info[i].width);*/
 
 			exynos_cpufreq_lock_free(DVFS_LOCK_ID_TSP);
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
 		}
 
 		// ESD protection code added: BEGIN
@@ -815,6 +827,7 @@ static void melfas_ts_get_data(struct melfas_ts_data *ts)
 			mdelay(200);
 			melfas_init_panel(ts);
 			enable_irq(ts->client->irq);
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
 
 			return;
 		}
@@ -827,20 +840,28 @@ static void melfas_ts_get_data(struct melfas_ts_data *ts)
 
 			g_Mtouch_info[FingerID].posX= (uint16_t)(buf[i+1] & 0x0F) << 8 | buf[i+2];
 			g_Mtouch_info[FingerID].posY= (uint16_t)(buf[i+1] & 0xF0) << 4 | buf[i+3];	
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
 			
-			if((buf[i] & 0x80)==0)
+			if((buf[i] & 0x80)==0){
 				g_Mtouch_info[FingerID].strength = TS_STATE_RELEASE;
-			else
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
+            }
+			else{
 				g_Mtouch_info[FingerID].strength = buf[i+5];
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
+            } 
 			
 			g_Mtouch_info[FingerID].width= buf[i+4];		
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
 			
 		}
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data -- for debug\n");
 	
 	}
 	else
 	{
 		printk(KERN_ERR "[melfasTSP] melfas_ts_get_data: read_num = %d\n",read_num);
+        tsp_dbg_msg("[melfasTSP] melfas_ts_get_data: read_num = %d\n",read_num);
 	}
 
 	_touch_is_pressed=0;	//Kishore
@@ -881,10 +902,10 @@ static void melfas_ts_get_data(struct melfas_ts_data *ts)
 #endif
 
 #if 1 
-		/*tsp_dbg_msg("Touch ID: %d, State : %d, x: %d, y: %d, z: %d w: %d\n",
+		tsp_dbg_msg("Touch ID: %d, State : %d, x: %d, y: %d, z: %d w: %d\n",
 			i, (g_Mtouch_info[i].strength>TS_STATE_RELEASE), 
 			g_Mtouch_info[i].posX, g_Mtouch_info[i].posY,
-			g_Mtouch_info[i].strength, g_Mtouch_info[i].width);*/
+			g_Mtouch_info[i].strength, g_Mtouch_info[i].width);
 #else
 		/*printk(KERN_DEBUG "[melfasTSP] currently melfas_ts_get_data:\
 			Touch ID: %d, State : %d, x: %d, y: %d, z: %d w: %d\n",
@@ -1025,18 +1046,27 @@ static int melfas_ts_probe(struct i2c_client *client, const struct i2c_device_id
 
 	ts->input_dev->name = "melfas-ts" ;
 
+#if 1 /* moguriso */
+	ts->input_dev->id.bustype = BUS_I2C;
+	ts->input_dev->dev.parent = &client->dev;
+
+	__set_bit(EV_ABS, ts->input_dev->evbit);
+	__set_bit(EV_KEY, ts->input_dev->evbit);
+	__set_bit(BTN_TOUCH, ts->input_dev->keybit);
+
+	input_set_abs_params(ts->input_dev, ABS_X, 0, TS_MAX_X_COORD, 0, 0);
+	input_set_abs_params(ts->input_dev, ABS_Y, 0, TS_MAX_Y_COORD, 0, 0);
+#else /* moguriso */
 	ts->input_dev->evbit[0] = BIT_MASK(EV_ABS) | BIT_MASK(EV_KEY);
-	
 
 	ts->input_dev->keybit[BIT_WORD(KEY_MENU)] |= BIT_MASK(KEY_MENU);
 	ts->input_dev->keybit[BIT_WORD(KEY_HOME)] |= BIT_MASK(KEY_HOME);
 	ts->input_dev->keybit[BIT_WORD(KEY_BACK)] |= BIT_MASK(KEY_BACK);		
 	ts->input_dev->keybit[BIT_WORD(KEY_SEARCH)] |= BIT_MASK(KEY_SEARCH);			
-
-
 //	__set_bit(BTN_TOUCH, ts->input_dev->keybit);
 //	__set_bit(EV_ABS,  ts->input_dev->evbit);
 //	ts->input_dev->evbit[0] =  BIT_MASK(EV_SYN) | BIT_MASK(EV_ABS) | BIT_MASK(EV_KEY);	
+#endif /* moguriso */
 
 #if	__SUPPORT_SLOT_FOR_ICS__
 	input_mt_init_slots(ts->input_dev, MELFAS_MAX_TOUCH-1);
@@ -1047,9 +1077,9 @@ static int melfas_ts_probe(struct i2c_client *client, const struct i2c_device_id
 	input_set_abs_params(ts->input_dev, ABS_MT_TOUCH_MAJOR, 0, TS_MAX_Z_TOUCH, 0, 0);
 	input_set_abs_params(ts->input_dev, ABS_MT_TRACKING_ID, 0, MELFAS_MAX_TOUCH-1, 0, 0);
 	input_set_abs_params(ts->input_dev, ABS_MT_WIDTH_MAJOR, 0, TS_MAX_W_TOUCH, 0, 0);
+
 //	__set_bit(EV_SYN, ts->input_dev->evbit); 
 //	__set_bit(EV_KEY, ts->input_dev->evbit);	
-
 
     ret = input_register_device(ts->input_dev);
     if (ret)
@@ -1373,16 +1403,15 @@ static struct i2c_driver melfas_ts_driver =
 
 static int __devinit melfas_ts_init(void)
 {
-    //moguriso
-//	#if defined(CONFIG_MACH_C1_KDDI_REV00)
-//	extern int sec_isLpmMode(void);
-//
-//	if (sec_isLpmMode())
-//	{
-//		printk(KERN_ERR "LPM MODE (melfas_ts_init)!\n");
-//		return 0;
-//	}
-//	#endif
+	#if defined(CONFIG_MACH_C1_KDDI_REV00)
+	extern int sec_isLpmMode(void);
+
+	if (sec_isLpmMode())
+	{
+		printk(KERN_ERR "LPM MODE (melfas_ts_init)!\n");
+		return 0;
+	}
+	#endif
 
 	return i2c_add_driver(&melfas_ts_driver);
 }
